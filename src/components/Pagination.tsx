@@ -24,7 +24,7 @@ const Pagination = () => {
 
 export default Pagination;
 
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

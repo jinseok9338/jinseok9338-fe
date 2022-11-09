@@ -28,7 +28,7 @@ const HomePage: NextPage = () => {
 
 export default HomePage;
 
-const Header = styled.div`
+const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,7 +39,7 @@ const Title = styled.a`
   font-size: 48px;
 `;
 
-const Container = styled.div`
+const Container = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;

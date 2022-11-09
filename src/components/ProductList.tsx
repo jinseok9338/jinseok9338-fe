@@ -17,7 +17,7 @@ const ProductList = ({ products }: ProductListProps) => (
 
 export default ProductList;
 
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   flex-wrap: wrap;
   width: 400px;

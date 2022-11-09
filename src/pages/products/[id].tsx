@@ -29,7 +29,7 @@ const ProductDetailPage: NextPage = () => {
 
 export default ProductDetailPage;
 
-const Header = styled.div`
+const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,12 +45,12 @@ const Thumbnail = styled.img`
   height: 420px;
 `;
 
-const ProductInfoWrapper = styled.div`
+const ProductInfoWrapper = styled.span`
   margin-top: 20px;
   padding: 0 20px;
 `;
 
-const Name = styled.div`
+const Name = styled.span` // this needs to be watched further 
   font-size: 20px;
   font-weight: bold;
 `;
