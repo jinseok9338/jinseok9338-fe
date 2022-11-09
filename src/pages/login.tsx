@@ -28,6 +28,25 @@ const LoginPage: NextPage = () => {
     }
   }
 
+
+  const handleSubmit = async ( e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const postData = async () => {
+      const data = {
+        id: id,
+        password: password,
+      };
+
+      const response = await fetch("/login", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      return response.json();
+    };
+    const result = await postData();
+    // need to store it in the session and local storage
+
+  }
   
 
   return (
@@ -40,7 +59,7 @@ const LoginPage: NextPage = () => {
           <p>login</p>
         </Link>
       </Header>
-      <Form>
+      <Form onSubmit={handleSubmit}> 
         <TextLabel>아이디</TextLabel>
         <TextInput errors ={idErrors} type='text' value={id} onChange={(e) => {
           setId(e.target.value)
@@ -58,7 +77,7 @@ const LoginPage: NextPage = () => {
           }
           }} onBlur ={(e) => checkPassword(e.target.value)} />
         {passwordErrors &&  <ErrorLabel>{"올바른 비밀번호 형식으로 입력해주세요."}</ErrorLabel>}
-        <LoginButton disabled ={!id || !password || idErrors || passwordErrors || !isValidId(id) || !isValidPassword(password)}>로그인</LoginButton>
+        <LoginButton type="submit" disabled ={!id || !password || idErrors || passwordErrors || !isValidId(id) || !isValidPassword(password)}>로그인</LoginButton>
       </Form>
     </>
   );
