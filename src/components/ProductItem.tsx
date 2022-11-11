@@ -23,6 +23,7 @@ const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemPro
         src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'}
         height={180}
         width={180}
+        loading='lazy'
       />
 
       <Link href={`/products/${id}`}>
