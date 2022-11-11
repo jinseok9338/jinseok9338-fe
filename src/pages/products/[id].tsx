@@ -4,22 +4,43 @@ import React from 'react';
 import styled from 'styled-components';
 
 import products from '../../api/data/products.json';
+import { useProductDetail } from '../../hooks/useProductDetail';
+import { addComma } from '../../utilities';
+import ErrorPage from '../error';
 
-const ProductDetailPage: NextPage = () => {
-  const product = products[0];
+interface ProductDetailPageProps {
+  id: string;
+}
+
+const ProductDetailPage: NextPage<ProductDetailPageProps> = ({ id }) => {
+  const { product } = useProductDetail(id);
 
   return (
     <>
-      <Thumbnail src={product.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
-      <ProductInfoWrapper>
-        <Name>{product.name}</Name>
-        <Price>{product.price}원</Price>
-      </ProductInfoWrapper>
+      {product ? (
+        <>
+          <Thumbnail src={product?.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
+          <ProductInfoWrapper>
+            <Name>{product?.name}</Name>
+            <Price>{product?.price && addComma(product?.price)}원</Price>
+          </ProductInfoWrapper>
+        </>
+      ) : (
+        <ErrorPage text={'존재하지 않는 상품입니다.'} />
+      )}
     </>
   );
 };
 
 export default ProductDetailPage;
+
+//get the product id from the url
+export async function getServerSideProps(context: any) {
+  const { id } = context.query;
+  return {
+    props: { id }, // will be passed to the page component as props
+  };
+}
 
 const Thumbnail = styled.img`
   width: 100%;

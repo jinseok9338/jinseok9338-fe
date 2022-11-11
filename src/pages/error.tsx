@@ -2,11 +2,15 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 
-const ErrorPage = () => {
+interface ErrorProps {
+  text: string;
+}
+
+const ErrorPage = ({ text }: ErrorProps) => {
   return (
     <Container>
       <Title>404</Title>
-      <Description>존재하지 않는 페이지 입니다.</Description>
+      <Description>{text}</Description>
       <Link href='/'>
         <StyledButton>홈으로</StyledButton>
       </Link>

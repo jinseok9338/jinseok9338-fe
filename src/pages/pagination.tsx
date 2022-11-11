@@ -26,7 +26,7 @@ const PaginationPage: NextPage<PaginationPageProps> = ({ page }) => {
             <Pagination page={page} />
           </>
         ) : (
-          <ErrorPage />
+          <ErrorPage text='존재하지 않는 페이지 입니다.' />
         )}
       </Container>
     </>
