@@ -34,6 +34,10 @@ export const useForm = (type: 'id' | 'password') => {
     }
   };
 
+  const clearValue = () => {
+    setValue('');
+  };
+
   // return value, onchange, errors
 
   return {
@@ -41,5 +45,6 @@ export const useForm = (type: 'id' | 'password') => {
     onChange,
     onBlur,
     error,
+    clearValue,
   };
 };

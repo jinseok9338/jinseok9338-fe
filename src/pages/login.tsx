@@ -1,19 +1,28 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { isValidId, isValidPassword } from '../utilities';
+import { fetchUserData, isValidId, isValidPassword } from '../utilities';
 import { useAuth } from '../context/authContext';
 import { useForm } from '../hooks/formHook';
+import { useRouter } from 'next/router';
 
 const LoginPage: NextPage = () => {
-  const { error: idErrors, onBlur: idOnBlur, onChange: idOnChange, value: id } = useForm('id');
+  const router = useRouter();
+  const {
+    error: idErrors,
+    onBlur: idOnBlur,
+    onChange: idOnChange,
+    value: id,
+    clearValue: clearId,
+  } = useForm('id');
 
   const {
     error: passwordErrors,
     onBlur: passwordOnBlur,
     onChange: passwordOnChange,
     value: password,
+    clearValue: clearPassword,
   } = useForm('password');
 
   const { logIn, user } = useAuth();
@@ -21,18 +30,20 @@ const LoginPage: NextPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     logIn(id, password);
+    clearId();
+    clearPassword();
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push({
+        pathname: '/',
+      });
+    }
+  }, []);
 
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
       <Form onSubmit={handleSubmit}>
         <TextLabel>아이디</TextLabel>
         <TextInput
@@ -78,17 +89,6 @@ const LoginPage: NextPage = () => {
 };
 
 export default LoginPage;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Form = styled.form`
   display: flex;

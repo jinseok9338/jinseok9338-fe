@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '../types/user';
 import jwt from 'jsonwebtoken';
+import { useRouter } from 'next/router';
 
 type AuthContextType = {
   user: User | null;
@@ -20,6 +21,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem('user_id');
@@ -32,6 +34,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // token 이 잘못되었음
         alert(e.message);
         localStorage.removeItem('user_id');
+        router.push({
+          pathname: '/login',
+        });
       }
     }
   }, []);
@@ -69,6 +74,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const userData = res.data.user;
       const user = { id: userData.ID, name: userData.NAME };
       setUser(user);
+      router.push({
+        pathname: '/',
+      });
     } catch (error) {
       console.log(error);
       alert('로그인에 실패했습니다.');
