@@ -13,3 +13,4 @@ top-level element (in most cases) ;
 don't put your site's header/menu/footer (repeated content) in your <main>.
 can hold article header/footer if specific.
 
+- JWT 내에서 토큰은 verify 하는 항목 (시간, 혹은 데이터 타입) 이 없어서 JWT 토큰 확인 항목은 제외

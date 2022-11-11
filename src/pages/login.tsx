@@ -44,6 +44,7 @@ const LoginPage: NextPage = () => {
       return response.json();
     };
     const result = await postData();
+    console.log(result.data.user);
     // need to store it in the session and local storage
 
   }
