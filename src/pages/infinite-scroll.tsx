@@ -1,15 +1,29 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-import products from '../api/data/products.json';
 import ProductList from '../components/ProductList';
 
-const InfiniteScrollPage: NextPage = () => {
+import { useScroll } from '../hooks/useScroll';
+import { useRouter } from 'next/router';
+
+interface InfiniteScrollPageProps {
+  page: string;
+}
+
+const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
+  const { products, handleScroll } = useScroll();
+  const router = useRouter();
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('popstate', handleScroll);
+  }, []);
+
   return (
     <>
-      <Container>
+      <Container onScroll={handleScroll}>
         <ProductList products={products} />
       </Container>
     </>

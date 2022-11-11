@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { Product } from '../types/product';
@@ -8,17 +10,28 @@ type ProductItemProps = {
   product: Product;
 };
 
-const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => (
-  <Container>
-    <Link href={`/products/${id}`}>
-      <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
-    </Link>
-    <Link href={`/products/${id}`}>
-      <Name>{name}</Name>
-    </Link>
-    <Price>{addComma(price)}원</Price>
-  </Container>
-);
+const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => {
+  const router = useRouter();
+
+  return (
+    <Container>
+      <Thumbnail
+        onClick={() => {
+          //redirect to the product detail page
+          router.push(`/products/${id}`);
+        }}
+        src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'}
+        height={180}
+        width={180}
+      />
+
+      <Link href={`/products/${id}`}>
+        <Name>{name}</Name>
+      </Link>
+      <Price>{addComma(price)}원</Price>
+    </Container>
+  );
+};
 
 export default ProductItem;
 
@@ -28,9 +41,8 @@ const Container = styled.a`
   margin-top: 20px;
 `;
 
-const Thumbnail = styled.img`
+const Thumbnail = styled(Image)`
   width: 100%;
-  height: 180px;
 `;
 
 const Name = styled.div`
