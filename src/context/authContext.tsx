@@ -25,7 +25,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem('user_id');
     if (token) {
       try {
-        const userId = jwt.decode(token);
+        //@ts-ignore
+        const userId = jwt.decode(token)!.user.id;
         fetchUserData(userId as string);
       } catch (e: any) {
         // token 이 잘못되었음
@@ -42,10 +43,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       const res = await response.json();
       const userData = res.data.user;
+
       const user = { id: userData.ID as String, name: userData.NAME as String };
       setUser(user);
     } catch (e) {
-      throw new Error('유저 정보를 가져오는데 실패했습니다.');
+      console.log(e);
     }
   };
 

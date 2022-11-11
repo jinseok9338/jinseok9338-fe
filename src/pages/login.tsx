@@ -3,52 +3,25 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { isValidId, isValidPassword } from '../utilities';
+import { useAuth } from '../context/authContext';
+import { useForm } from '../hooks/formHook';
 
 const LoginPage: NextPage = () => {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+  const { error: idErrors, onBlur: idOnBlur, onChange: idOnChange, value: id } = useForm('id');
 
-  const [idErrors, setIdErrors] = useState(false);
-  const [passwordErrors, setPasswordErrors] = useState(false);
+  const {
+    error: passwordErrors,
+    onBlur: passwordOnBlur,
+    onChange: passwordOnChange,
+    value: password,
+  } = useForm('password');
 
-  
-  const checkId = (id:string) => {
-    if (isValidId(id)) {
-      setIdErrors(false);
-    } else {
-      setIdErrors(true);
-    }
-  }
+  const { logIn, user } = useAuth();
 
-  const checkPassword = (password:string) => {
-    if (isValidPassword(password)) {
-      setPasswordErrors(false);
-    } else {
-      setPasswordErrors(true);
-    }
-  }
-
-
-  const handleSubmit = async ( e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const postData = async () => {
-      const data = {
-        id: id,
-        password: password,
-      };
-
-      const response = await fetch("/login", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-      return response.json();
-    };
-    const result = await postData();
-    console.log(result.data.user);
-    // need to store it in the session and local storage
-
-  }
-  
+    logIn(id, password);
+  };
 
   return (
     <>
@@ -60,25 +33,45 @@ const LoginPage: NextPage = () => {
           <p>login</p>
         </Link>
       </Header>
-      <Form onSubmit={handleSubmit}> 
+      <Form onSubmit={handleSubmit}>
         <TextLabel>아이디</TextLabel>
-        <TextInput errors ={idErrors} type='text' value={id} onChange={(e) => {
-          setId(e.target.value)
-          if(isValidId(e.target.value)){
-            setIdErrors(false)
-          }
-          }} onBlur ={(e) => checkId(e.target.value)} />
-        {idErrors &&  <ErrorLabel>{"올바른 아이디 형식으로 입력해주세요."}</ErrorLabel>}
-            <Divider/>
+        <TextInput
+          errors={idErrors}
+          type='text'
+          onChange={(e) => {
+            idOnChange(e);
+          }}
+          onBlur={(e) => {
+            idOnBlur();
+          }}
+        />
+        {idErrors && <ErrorLabel>{'올바른 아이디 형식으로 입력해주세요.'}</ErrorLabel>}
+        <Divider />
         <TextLabel>비밀번호</TextLabel>
-        <TextInput errors={passwordErrors} type='password' value={password} onChange={(e) => {
-          setPassword(e.target.value)
-          if(isValidPassword(e.target.value)){
-            setPasswordErrors(false)
+        <TextInput
+          errors={passwordErrors}
+          type='password'
+          onChange={(e) => {
+            passwordOnChange(e);
+          }}
+          onBlur={(e) => {
+            passwordOnBlur();
+          }}
+        />
+        {passwordErrors && <ErrorLabel>{'올바른 비밀번호 형식으로 입력해주세요.'}</ErrorLabel>}
+        <LoginButton
+          type='submit'
+          disabled={
+            !id ||
+            !password ||
+            idErrors ||
+            passwordErrors ||
+            !isValidId(id) ||
+            !isValidPassword(password)
           }
-          }} onBlur ={(e) => checkPassword(e.target.value)} />
-        {passwordErrors &&  <ErrorLabel>{"올바른 비밀번호 형식으로 입력해주세요."}</ErrorLabel>}
-        <LoginButton type="submit" disabled ={!id || !password || idErrors || passwordErrors || !isValidId(id) || !isValidPassword(password)}>로그인</LoginButton>
+        >
+          로그인
+        </LoginButton>
       </Form>
     </>
   );
@@ -106,14 +99,14 @@ const Form = styled.form`
 `;
 
 const Divider = styled.div`
-height: 16px;
-`
+  height: 16px;
+`;
 
 const TextLabel = styled.label`
-font-weight: 800;
-font-size: 13px;
-color: #6c6c7d; 
-`
+  font-weight: 800;
+  font-size: 13px;
+  color: #6c6c7d;
+`;
 
 interface Props {
   errors: boolean;
@@ -122,16 +115,16 @@ interface Props {
 const TextInput = styled.input<Props>`
   margin-top: 8px;
   padding: 16px;
-  background: ${props => props.errors ? "#fdedee" : "#f7f7fa"};
+  background: ${(props) => (props.errors ? '#fdedee' : '#f7f7fa')};
   border-radius: 12px;
 `;
 
 const ErrorLabel = styled.label`
-margin-top: 8px;
-font-weight: 400;
-font-size: 13px;
-color:#ed4e5c
-`
+  margin-top: 8px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #ed4e5c;
+`;
 
 const LoginButton = styled.button`
   margin-top: 40px;
@@ -143,6 +136,4 @@ const LoginButton = styled.button`
   &:disabled {
     background-color: #e2e2ea;
   }
-
-
 `;
