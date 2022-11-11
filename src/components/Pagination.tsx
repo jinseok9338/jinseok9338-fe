@@ -1,21 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
 
-const Pagination = () => {
+import { useRouter } from 'next/router';
+
+interface PaginationProps {
+  page: string;
+}
+
+const Pagination = ({ page }: PaginationProps) => {
+  const router = useRouter();
+  const indexes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  const [currentPages, setCurrentPages] = useState(indexes.slice(0, 5));
+
+  // get 5 numbers after the current page
+  const getPagesAfter = (page: number) => {
+    if (page + 5 > indexes.length) {
+      const pagesAfter = indexes.slice(page, indexes.length);
+      setCurrentPages(pagesAfter);
+    }
+    const pagesAfter = indexes.slice(page, page + 5);
+    setCurrentPages(pagesAfter);
+  };
+
   return (
     <Container>
-      <Button disabled>
+      <Button disabled={page == '1'} onClick={() => router.push(`/pagination?page=${1}`)}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
-        {[1, 2, 3, 4, 5].map((page) => (
-          <Page key={page} selected={page === 1} disabled={page === 1}>
-            {page}
+        {currentPages.map((index) => (
+          <Page
+            onClick={() => router.push(`/pagination?page=${index}`)}
+            key={index}
+            selected={index === parseInt(page)}
+            disabled={index === parseInt(page)}
+          >
+            {index}
           </Page>
         ))}
       </PageWrapper>
-      <Button disabled={false}>
+      <Button disabled={page == '11'} onClick={() => router.push(`/pagination?page=${5}`)}>
         <VscChevronRight />
       </Button>
     </Container>

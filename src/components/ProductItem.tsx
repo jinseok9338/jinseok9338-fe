@@ -1,16 +1,22 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
 import { Product } from '../types/product';
+import { addComma } from '../utilities';
 
 type ProductItemProps = {
   product: Product;
 };
 
-const ProductItem = ({ product: { name, thumbnail, price } }: ProductItemProps) => (
+const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => (
   <Container>
-    <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
-    <Name>{name}</Name>
-    <Price>{price}</Price>
+    <Link href={`/products/${id}`}>
+      <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
+    </Link>
+    <Link href={`/products/${id}`}>
+      <Name>{name}</Name>
+    </Link>
+    <Price>{addComma(price)}원</Price>
   </Container>
 );
 

@@ -31,3 +31,17 @@ export const fetchUserData = async (userId: string) => {
     console.log(e);
   }
 };
+
+export const addComma = (num: number) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+export const isDivisibleByFive = (num: string) => {
+  const number = Number(num);
+  return number % 5 === 0;
+};
+
+export const isRemainderOne = (num: string) => {
+  const number = Number(num);
+  return number % 5 === 1;
+};
