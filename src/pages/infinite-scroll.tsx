@@ -21,7 +21,6 @@ const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
   const handleObserver = useCallback((entries: any) => {
     const target = entries[0];
     if (target.isIntersecting) {
-      console.log('intersecting');
       setPage((prev) => prev + 1);
     }
   }, []);
@@ -36,6 +35,21 @@ const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
     if (loader.current) observer.observe(loader.current);
     return () => {
       if (loader.current) observer.unobserve(loader.current);
+    };
+  }, []);
+
+  //on popstate event, add event listener to the back button
+
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      // if the url is /products/[id], persists the page number
+      if (url.includes('/products/')) {
+      }
+    };
+    router.events.on('routeChangeStart', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
     };
   }, []);
 
