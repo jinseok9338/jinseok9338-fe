@@ -17,7 +17,7 @@ const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemPro
     <Container>
       <Thumbnail
         onClick={() => {
-          router.push(`/products/${id}`, undefined, { shallow: true });
+          router.push(`/products/${id}`, undefined, { scroll: false });
         }}
         src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'}
         height={180}

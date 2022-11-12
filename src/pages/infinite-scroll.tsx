@@ -14,7 +14,6 @@ interface InfiniteScrollPageProps {
 }
 
 const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
-  const [page, setPage] = useState(() => 1);
   const { handleObserver, error, loading, products } = useInfiniteProducts();
 
   const loader = useRef(null);
@@ -29,21 +28,6 @@ const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
     if (loader.current) observer.observe(loader.current);
     return () => {
       if (loader.current) observer.unobserve(loader.current);
-    };
-  }, []);
-
-  //on popstate event, add event listener to the back button
-
-  const router = useRouter();
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      if (url.includes('/products/')) {
-        // scroll to the previous position
-      }
-    };
-    router.events.on('routeChangeStart', handleRouteChange);
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange);
     };
   }, []);
 

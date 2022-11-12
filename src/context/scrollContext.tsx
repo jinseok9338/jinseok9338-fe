@@ -9,6 +9,7 @@ type ProductsContextType = {
   error: boolean;
   handleObserver: (entries: any) => void;
   scrollPosition: number;
+  saveScrollPosition: () => void;
 };
 
 const ProductsContext = createContext<ProductsContextType>({
@@ -17,6 +18,7 @@ const ProductsContext = createContext<ProductsContextType>({
   error: false,
   handleObserver: () => {},
   scrollPosition: 0,
+  saveScrollPosition: () => {},
 });
 
 export const useInfiniteProducts = () => useContext(ProductsContext);
@@ -26,7 +28,7 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(500);
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -49,12 +51,18 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
     }
   }, []);
 
+  const saveScrollPosition = () => {
+    setScrollPosition(window.scrollY);
+  };
+
   useEffect(() => {
     fetchProducts();
   }, [page, fetchProducts]);
 
   return (
-    <ProductsContext.Provider value={{ products, loading, error, handleObserver, scrollPosition }}>
+    <ProductsContext.Provider
+      value={{ products, loading, error, handleObserver, scrollPosition, saveScrollPosition }}
+    >
       {children}
     </ProductsContext.Provider>
   );

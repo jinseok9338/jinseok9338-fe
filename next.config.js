@@ -9,6 +9,9 @@ const nextConfig = {
   images: {
     domains: ['contents.sixshop.com'],
   },
+  experimental: {
+    scrollRestoration: true,
+  },
 };
 
 module.exports = nextConfig;
