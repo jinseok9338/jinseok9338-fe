@@ -19,11 +19,10 @@ const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
   const loader = useRef(null);
 
   const handleObserver = useCallback((entries: any) => {
-    console.log(entries);
     const target = entries[0];
     if (target.isIntersecting) {
+      console.log('intersecting');
       setPage((prev) => prev + 1);
-      console.log('Fetching more products...');
     }
   }, []);
 
@@ -35,7 +34,10 @@ const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
     };
     const observer = new IntersectionObserver(handleObserver, option);
     if (loader.current) observer.observe(loader.current);
-  }, [handleObserver]);
+    return () => {
+      if (loader.current) observer.unobserve(loader.current);
+    };
+  }, []);
 
   return (
     <>

@@ -19,10 +19,10 @@ function useFetch(size: number = 16, page: number) {
     } catch (e) {
       setError(true);
     }
-  }, [size, page]);
+  }, [page]);
 
   useEffect(() => {
-    fetchProducts(page);
+    fetchProducts();
   }, [page, fetchProducts, size]);
 
   return { loading, error, products };
