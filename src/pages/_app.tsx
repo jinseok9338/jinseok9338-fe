@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import setupMSW from '../api/setup';
 import Layout from '../components/Layout';
 import { AuthProvider } from '../context/authContext';
+import { InfiniteProductsProvider } from '../context/scrollContext';
 import GlobalStyle from '../styles/GlobalStyle';
 
 setupMSW();
@@ -12,13 +13,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AuthProvider>
-        <GlobalStyle />
-        <Background />
-        <Content>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Content>
+        <InfiniteProductsProvider>
+          <GlobalStyle />
+          <Background />
+          <Content>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Content>
+        </InfiniteProductsProvider>
       </AuthProvider>
     </>
   );

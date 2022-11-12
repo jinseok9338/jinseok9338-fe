@@ -7,23 +7,17 @@ import ProductList from '../components/ProductList';
 
 import useFetch from '../hooks/useScroll';
 import { useRouter } from 'next/router';
+import { useInfiniteProducts } from '../context/scrollContext';
 
 interface InfiniteScrollPageProps {
   page: string;
 }
 
 const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
-  const [page, setPage] = useState(1);
-  const { loading, error, products } = useFetch(16, page);
+  const [page, setPage] = useState(() => 1);
+  const { handleObserver, error, loading, products } = useInfiniteProducts();
 
   const loader = useRef(null);
-
-  const handleObserver = useCallback((entries: any) => {
-    const target = entries[0];
-    if (target.isIntersecting) {
-      setPage((prev) => prev + 1);
-    }
-  }, []);
 
   useEffect(() => {
     const option = {
@@ -43,8 +37,8 @@ const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
   const router = useRouter();
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      // if the url is /products/[id], persists the page number
       if (url.includes('/products/')) {
+        // scroll to the previous position
       }
     };
     router.events.on('routeChangeStart', handleRouteChange);

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
+import { InfiniteProductsProvider } from '../context/scrollContext';
 
 const HomePage: NextPage = () => {
   return (
