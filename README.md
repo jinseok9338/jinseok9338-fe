@@ -3,14 +3,6 @@
 - [과제 안내 링크](https://www.notion.so/sixshop/af7f8a9586b648e6ba92a8c24ff0ef66)
 - 과제 제출 기한은 과제 메일 발송일로부터 7일 후 자정 12시까지 입니다. 기한을 꼭 지켜주세요.
 
+아래 링크에 과제 구현 한것에 대한 문서이니 꼭 읽어 주시기 바랍니다.
 
-- main tag 사용법
-
-Rule of thumb :
-
-only one <main> per page ;
-top-level element (in most cases) ;
-don't put your site's header/menu/footer (repeated content) in your <main>.
-can hold article header/footer if specific.
-
-- JWT 내에서 토큰은 verify 하는 항목 (시간, 혹은 데이터 타입) 이 없어서 JWT 토큰 확인 항목은 제외
+- [과제 구현 문서](https://www.notion.so/16b50ea931754d0382132e0e80566635)
