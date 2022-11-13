@@ -12,15 +12,27 @@ const Pagination = ({ page }: PaginationProps) => {
   const router = useRouter();
   const indexes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   const [currentPages, setCurrentPages] = useState(indexes.slice(0, 5));
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // get 5 numbers after the current page
-  const getPagesAfter = (page: number) => {
-    if (page + 5 > indexes.length) {
-      const pagesAfter = indexes.slice(page, indexes.length);
-      setCurrentPages(pagesAfter);
-    }
-    const pagesAfter = indexes.slice(page, page + 5);
-    setCurrentPages(pagesAfter);
+  const goToNextPage = () => {
+    setCurrentPage((page) => page + 1);
+  };
+
+  const goToPreviousPage = () => {
+    setCurrentPage((page) => page - 1);
+  };
+
+  const changePage = (event) => {
+    const pageNumber = Number(event.target.textContent);
+    setCurrentPage(pageNumber);
+  };
+
+  const getPaginatedData = () => {
+    // not yet implemented
+  };
+
+  const getPaginationGroup = () => {
+    // not yet implemented
   };
 
   return (

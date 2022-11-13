@@ -1,5 +1,3 @@
-// wirte auth context and auth provider in react
-// Path: src/context/authContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '../types/user';
 import jwt from 'jsonwebtoken';
