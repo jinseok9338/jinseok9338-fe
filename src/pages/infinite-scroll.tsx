@@ -14,7 +14,35 @@ interface InfiniteScrollPageProps {
 }
 
 const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
-  const { products, loader } = useInfiniteProducts();
+  const { products, setPage } = useInfiniteProducts();
+
+  const loader = useRef(null);
+
+  const handleObserver = useCallback((entries: any) => {
+    const target = entries[0];
+    console.log(target);
+    if (target.isIntersecting && target.boundingClientRect.top > 100) {
+      setPage((prev) => prev + 1);
+    }
+  }, []);
+
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 1,
+    };
+
+    if (!loader.current) return;
+
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+    return () => {
+      if (loader.current) observer.disconnect();
+    };
+  }, [handleObserver, loader]);
 
   return (
     <>

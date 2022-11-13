@@ -7,14 +7,14 @@ type ProductsContextType = {
   products: Product[];
   loading: boolean;
   error: boolean;
-  loader: any;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const ProductsContext = createContext<ProductsContextType>({
   products: [],
   loading: false,
   error: false,
-  loader: null,
+  setPage: () => {},
 });
 
 export const useInfiniteProducts = () => useContext(ProductsContext);
@@ -25,7 +25,6 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
   const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const loader = useRef(null);
 
   const fetchProducts = useCallback(async () => {
     if (!hasMore) return;
@@ -47,35 +46,12 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
     }
   }, [products]);
 
-  const handleObserver = useCallback((entries: any) => {
-    const target = entries[0];
-    if (target.isIntersecting && target.boundingClientRect.top > 100) {
-      setPage((prev) => prev + 1);
-    }
-  }, []);
-
-  useEffect(() => {
-    const option = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 1,
-    };
-
-    const observer = new IntersectionObserver(handleObserver, option);
-    if (loader.current) {
-      observer.observe(loader.current);
-    }
-    return () => {
-      if (loader.current) observer.unobserve(loader.current!);
-    };
-  }, []);
-
   useEffect(() => {
     fetchProducts();
   }, [page]);
 
   return (
-    <ProductsContext.Provider value={{ products, loading, error, loader }}>
+    <ProductsContext.Provider value={{ products, loading, error, setPage }}>
       {children}
     </ProductsContext.Provider>
   );
