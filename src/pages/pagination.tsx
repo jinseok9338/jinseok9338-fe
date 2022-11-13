@@ -24,12 +24,13 @@ const PaginationPage: NextPage<PaginationPageProps> = ({ page }) => {
     clickNextButton,
     clickPreviousButton,
     error,
+    loading,
   } = usePagination(page);
 
   return (
     <>
       <Container>
-        {products && !error ? (
+        {products ? (
           <>
             <ProductList products={products?.slice(0, 10)} />
             <Pagination
@@ -42,9 +43,11 @@ const PaginationPage: NextPage<PaginationPageProps> = ({ page }) => {
               clickPreviousButton={clickPreviousButton}
             />
           </>
-        ) : (
+        ) : error ? (
           <ErrorPage text='존재하지 않는 페이지 입니다.' />
-        )}
+        ) : loading ? (
+          <>Loading...</>
+        ) : null}
       </Container>
     </>
   );

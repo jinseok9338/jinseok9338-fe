@@ -36,6 +36,7 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
       setProducts([...products, ...newProducts]);
       setLoading(false);
     } catch (e) {
+      setError(true);
       setHasMore(false);
     }
   }, [page]);

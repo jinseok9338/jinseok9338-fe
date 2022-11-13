@@ -4,7 +4,7 @@ import { Product } from '../types/product';
 
 export const usePagination = (page: string, size = 10) => {
   const [products, setProducts] = useState<Product[]>([]);
-
+  const [loading, setLoading] = useState(false);
   const [pages, setPages] = useState<number[]>([]);
   const [lastPageNumber, setLastPageNumber] = useState(0);
   const [error, setError] = useState(false);
@@ -59,6 +59,7 @@ export const usePagination = (page: string, size = 10) => {
 
   const fetchProducts = async (page: string) => {
     try {
+      setLoading(true);
       const res = await fetch(`/products?page=${page}&size=${size}`);
       const data = await res.json();
       const products = data.data?.products as Product[];
@@ -74,8 +75,10 @@ export const usePagination = (page: string, size = 10) => {
         Math.floor((parseInt(page) - 1) / 5) * 5 + 5
       );
       setPages(currentPageGroup);
+      setLoading(false);
     } catch (e) {
       setError(true);
+      setLoading(false);
     }
   };
 
@@ -96,5 +99,6 @@ export const usePagination = (page: string, size = 10) => {
     disableNextButton,
     disablePreviousButton,
     error,
+    loading,
   };
 };

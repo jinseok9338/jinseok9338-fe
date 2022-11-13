@@ -11,11 +11,11 @@ interface ProductDetailPageProps {
 }
 
 const ProductDetailPage: NextPage<ProductDetailPageProps> = ({ id }) => {
-  const { product } = useProductDetail(id);
+  const { product, loading, error } = useProductDetail(id);
 
   return (
     <>
-      {product ? (
+      {product && !loading ? (
         <>
           <Thumbnail src={product?.thumbnail ? product.thumbnail : '/defaultThumbnail.jpg'} />
           <ProductInfoWrapper>
@@ -23,9 +23,11 @@ const ProductDetailPage: NextPage<ProductDetailPageProps> = ({ id }) => {
             <Price>{product?.price && addComma(product?.price)}원</Price>
           </ProductInfoWrapper>
         </>
-      ) : (
+      ) : loading && !product ? (
+        <>Loading...</>
+      ) : error ? (
         <ErrorPage text={'존재하지 않는 상품입니다.'} />
-      )}
+      ) : null}
     </>
   );
 };
