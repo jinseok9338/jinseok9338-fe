@@ -1,12 +1,10 @@
-import Link from 'next/link';
 import type { NextPage } from 'next';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { useProductDetail } from '../../hooks/useProductDetail';
 import { addComma } from '../../utilities';
 import ErrorPage from '../error';
-import { useRouter } from 'next/router';
 
 interface ProductDetailPageProps {
   id: string;

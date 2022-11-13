@@ -42,6 +42,12 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
     }
   }, [page]);
 
+  useEffect(() => {
+    if (products.length >= 105) {
+      setHasMore(false);
+    }
+  }, [products]);
+
   const handleObserver = useCallback((entries: any) => {
     const target = entries[0];
     if (target.isIntersecting) {
