@@ -23,6 +23,8 @@ const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemPro
         height={180}
         width={180}
         loading='lazy'
+        placeholder='blur'
+        blurDataURL={thumbnail ? thumbnail : '/defaultThumbnail.jpg'}
       />
 
       <Link href={`/products/${id}`}>

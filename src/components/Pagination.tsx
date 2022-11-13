@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
 
@@ -6,42 +6,32 @@ import { useRouter } from 'next/router';
 
 interface PaginationProps {
   page: string;
+  pages: number[];
+  clickNextButton: () => void;
+  clickPreviousButton: () => void;
+  lastPageNumber: number;
+  disablePreviousButton: (page: string) => boolean;
+  disableNextButton: (page: string) => boolean;
 }
 
-const Pagination = ({ page }: PaginationProps) => {
+const Pagination = ({
+  page,
+  pages,
+  clickNextButton,
+  clickPreviousButton,
+  lastPageNumber,
+  disablePreviousButton,
+  disableNextButton,
+}: PaginationProps) => {
   const router = useRouter();
-  const indexes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  const [currentPages, setCurrentPages] = useState(indexes.slice(0, 5));
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const goToNextPage = () => {
-    setCurrentPage((page) => page + 1);
-  };
-
-  const goToPreviousPage = () => {
-    setCurrentPage((page) => page - 1);
-  };
-
-  const changePage = (event) => {
-    const pageNumber = Number(event.target.textContent);
-    setCurrentPage(pageNumber);
-  };
-
-  const getPaginatedData = () => {
-    // not yet implemented
-  };
-
-  const getPaginationGroup = () => {
-    // not yet implemented
-  };
 
   return (
     <Container>
-      <Button disabled={page == '1'} onClick={() => router.push(`/pagination?page=${1}`)}>
+      <Button disabled={disablePreviousButton(page)} onClick={() => clickPreviousButton()}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
-        {currentPages.map((index) => (
+        {pages.map((index) => (
           <Page
             onClick={() => router.push(`/pagination?page=${index}`)}
             key={index}
@@ -52,7 +42,7 @@ const Pagination = ({ page }: PaginationProps) => {
           </Page>
         ))}
       </PageWrapper>
-      <Button disabled={page == '11'} onClick={() => router.push(`/pagination?page=${5}`)}>
+      <Button disabled={disableNextButton(page)} onClick={() => clickNextButton()}>
         <VscChevronRight />
       </Button>
     </Container>

@@ -15,15 +15,32 @@ interface PaginationPageProps {
 }
 
 const PaginationPage: NextPage<PaginationPageProps> = ({ page }) => {
-  const { products } = usePagination(page);
+  const {
+    products,
+    disableNextButton,
+    disablePreviousButton,
+    lastPageNumber,
+    pages,
+    clickNextButton,
+    clickPreviousButton,
+    error,
+  } = usePagination(page);
 
   return (
     <>
       <Container>
-        {products ? (
+        {products && !error ? (
           <>
             <ProductList products={products?.slice(0, 10)} />
-            <Pagination page={page} />
+            <Pagination
+              disableNextButton={disableNextButton}
+              disablePreviousButton={disablePreviousButton}
+              lastPageNumber={lastPageNumber}
+              page={page}
+              pages={pages}
+              clickNextButton={clickNextButton}
+              clickPreviousButton={clickPreviousButton}
+            />
           </>
         ) : (
           <ErrorPage text='존재하지 않는 페이지 입니다.' />

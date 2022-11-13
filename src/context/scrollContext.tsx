@@ -1,20 +1,20 @@
 // prodcuts context api
 // Path: src/context/productsContext.tsx
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Product } from '../types/product';
 
 type ProductsContextType = {
   products: Product[];
   loading: boolean;
   error: boolean;
-  handleObserver: (entries: any) => void;
+  loader: any;
 };
 
 const ProductsContext = createContext<ProductsContextType>({
   products: [],
   loading: false,
   error: false,
-  handleObserver: () => {},
+  loader: null,
 });
 
 export const useInfiniteProducts = () => useContext(ProductsContext);
@@ -25,19 +25,18 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
   const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const loader = useRef(null);
 
   const fetchProducts = useCallback(async () => {
     if (!hasMore) return;
     try {
       setLoading(true);
-      setError(false);
       const res = await fetch(`/products?page=${page}&size=${16}`); // needs query
       const data = await res.json();
       const newProducts = data.data?.products as Product[];
       setProducts([...products, ...newProducts]);
       setLoading(false);
     } catch (e) {
-      setError(true);
       setHasMore(false);
     }
   }, [page]);
@@ -50,17 +49,33 @@ export const InfiniteProductsProvider = ({ children }: { children: React.ReactNo
 
   const handleObserver = useCallback((entries: any) => {
     const target = entries[0];
-    if (target.isIntersecting) {
+    if (target.isIntersecting && target.boundingClientRect.top > 100) {
       setPage((prev) => prev + 1);
     }
   }, []);
 
   useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1,
+    };
+
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+    return () => {
+      if (loader.current) observer.unobserve(loader.current!);
+    };
+  }, []);
+
+  useEffect(() => {
     fetchProducts();
-  }, [page, fetchProducts]);
+  }, [page]);
 
   return (
-    <ProductsContext.Provider value={{ products, loading, error, handleObserver }}>
+    <ProductsContext.Provider value={{ products, loading, error, loader }}>
       {children}
     </ProductsContext.Provider>
   );
