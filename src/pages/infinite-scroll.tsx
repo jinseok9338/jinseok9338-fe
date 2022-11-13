@@ -1,26 +1,22 @@
-import Link from 'next/link';
 import type { NextPage } from 'next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-
 import ProductList from '../components/ProductList';
-
-import useFetch from '../hooks/useScroll';
-import { useRouter } from 'next/router';
 import { useInfiniteProducts } from '../context/scrollContext';
+import ErrorPage from './error';
 
 interface InfiniteScrollPageProps {
   page: string;
 }
 
 const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
-  const { products, setPage } = useInfiniteProducts();
+  const { products, setPage, loading, error } = useInfiniteProducts();
 
   const loader = useRef(null);
 
   const handleObserver = useCallback((entries: any) => {
     const target = entries[0];
-    console.log(target);
+
     if (target.isIntersecting && target.boundingClientRect.top > 100) {
       setPage((prev) => prev + 1);
     }
@@ -47,8 +43,16 @@ const InfiniteScrollPage: NextPage<InfiniteScrollPageProps> = () => {
   return (
     <>
       <Container>
-        <ProductList products={products} />
-        <div ref={loader} />
+        {products ? (
+          <>
+            <ProductList products={products} />
+            <div ref={loader} />
+          </>
+        ) : loading ? (
+          <>Loading...</>
+        ) : error ? (
+          <ErrorPage text='존재하지 않는 페이지 입니다.' />
+        ) : null}
       </Container>
     </>
   );
