@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import React from 'react';
 import styled from 'styled-components';
 import { InfiniteProductsProvider } from '../context/scrollContext';
+import { useRouter } from 'next/router';
 
 const HomePage: NextPage = () => {
   return (
@@ -30,7 +31,7 @@ const Container = styled.main`
   margin-top: 40px;
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled.span`
   display: flex;
   justify-content: center;
   width: 240px;
