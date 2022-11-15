@@ -13,19 +13,19 @@ setupMSW();
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <CookiesProvider>
-        <AuthProvider>
-          <InfiniteProductsProvider>
-            <GlobalStyle />
-            <Background />
-            <Content>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </Content>
-          </InfiniteProductsProvider>
-        </AuthProvider>
-      </CookiesProvider>
+      {/* <CookiesProvider> */}
+      <AuthProvider>
+        <InfiniteProductsProvider>
+          <GlobalStyle />
+          <Background />
+          <Content>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Content>
+        </InfiniteProductsProvider>
+      </AuthProvider>
+      {/* </CookiesProvider> */}
     </>
   );
 }
