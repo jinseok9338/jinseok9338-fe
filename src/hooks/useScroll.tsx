@@ -1,30 +1,36 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Product } from '../types/product';
 
-function useFetch(page: number) {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
+function useFetch(setPage: React.Dispatch<React.SetStateAction<number>>) {
+  const loader = useRef(null);
 
-  const fetchProducts = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(false);
-      const res = await fetch(`/products?page=${page}&size=${16}`); // needs query
-      const data = await res.json();
-      const newProducts = data.data?.products as Product[];
-      setProducts([...products, ...newProducts]);
-      setLoading(false);
-    } catch (e) {
-      setError(true);
+  const handleObserver = useCallback((entries: any) => {
+    const target = entries[0];
+
+    if (target.isIntersecting && target.boundingClientRect.top > 100) {
+      setPage((prev) => prev + 1);
     }
-  }, [page]);
+  }, []);
 
   useEffect(() => {
-    fetchProducts();
-  }, [page, fetchProducts]);
+    const option = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 1,
+    };
 
-  return { loading, error, products };
+    if (!loader.current) return;
+
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (loader.current) {
+      observer.observe(loader.current);
+    }
+    return () => {
+      if (loader.current) observer.disconnect();
+    };
+  }, [handleObserver, loader]);
+
+  return { loader };
 }
 
 export default useFetch;
