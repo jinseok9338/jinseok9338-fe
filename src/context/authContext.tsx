@@ -74,11 +74,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const userData = res.data.user;
       const user = { id: userData.ID, name: userData.NAME };
       setUser(user);
-      setCookie('user', JSON.stringify(user), {
-        path: '/',
-        maxAge: 3600 * 24, // Expires after 24hr
-        sameSite: true,
-      });
+      // setCookie('user', JSON.stringify(user), {
+      //   path: '/',
+      //   maxAge: 3600 * 24, // Expires after 24hr
+      //   sameSite: true,
+      // });
       router.push({
         pathname: '/',
       });
