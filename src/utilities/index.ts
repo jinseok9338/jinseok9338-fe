@@ -1,3 +1,6 @@
+import cookie from 'cookie';
+import { IncomingMessage } from 'http';
+
 export const parseQueryString = (search: string): Record<string, string> =>
   (search || '')
     .replace(/^\?/g, '')
@@ -50,3 +53,7 @@ export const isRemainderOne = (num: string) => {
   const number = Number(num);
   return number % 5 === 1;
 };
+
+export function parseCookies(req: IncomingMessage | undefined) {
+  return cookie.parse(req ? req.headers.cookie || '' : document.cookie);
+}

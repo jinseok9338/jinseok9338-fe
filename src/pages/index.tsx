@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { InfiniteProductsProvider } from '../context/scrollContext';
 import { useRouter } from 'next/router';
+import { parseCookies } from '../utilities';
 
 const HomePage: NextPage = () => {
   return (

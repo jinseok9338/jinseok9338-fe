@@ -6,23 +6,26 @@ import Layout from '../components/Layout';
 import { AuthProvider } from '../context/authContext';
 import { InfiniteProductsProvider } from '../context/scrollContext';
 import GlobalStyle from '../styles/GlobalStyle';
-
+import { CookiesProvider } from 'react-cookie';
+import { parseCookies } from '../utilities';
 setupMSW();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-      <AuthProvider>
-        <InfiniteProductsProvider>
-          <GlobalStyle />
-          <Background />
-          <Content>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </Content>
-        </InfiniteProductsProvider>
-      </AuthProvider>
+      <CookiesProvider>
+        <AuthProvider>
+          <InfiniteProductsProvider>
+            <GlobalStyle />
+            <Background />
+            <Content>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </Content>
+          </InfiniteProductsProvider>
+        </AuthProvider>
+      </CookiesProvider>
     </>
   );
 }

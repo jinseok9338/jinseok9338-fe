@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '../types/user';
 import jwt from 'jsonwebtoken';
 import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
 
 type AuthContextType = {
   user: User | null;
@@ -19,6 +20,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [cookie, setCookie] = useCookies(['user']);
   const router = useRouter();
 
   useEffect(() => {
@@ -72,6 +74,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const userData = res.data.user;
       const user = { id: userData.ID, name: userData.NAME };
       setUser(user);
+      setCookie('user', JSON.stringify(user), {
+        path: '/',
+        maxAge: 3600 * 24, // Expires after 24hr
+        sameSite: true,
+      });
       router.push({
         pathname: '/',
       });
